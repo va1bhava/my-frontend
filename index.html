@@ -97,7 +97,7 @@ function showWeather() {
     const city = document.getElementById("city").value.trim();
     if(!city) return alert("Enter a city");
 
-    fetch(`http://localhost:1111/weather/show/${city}`)
+    fetch(`https://my-backend-production-58f1.up.railway.app/weather/show/${city}`)
         .then(res => res.json())
         .then(data => displayWeather(data))
         .catch(() => {
