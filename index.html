@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weather Viewer</title>
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.container {
+    background:white;
+    border-radius:20px;
+    padding:30px;
+    width:550px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.3);
+}
+
+h1 {
+    text-align:center;
+    margin-bottom:25px;
+    color:#667eea;
+}
+
+.input-row {
+    display:flex;
+    gap:10px;
+    margin-bottom:20px;
+}
+
+input {
+    flex:1;
+    padding:12px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-size:16px;
+}
+
+button {
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    color:white;
+    font-weight:bold;
+    background:#f5576c;
+    font-size:16px;
+}
+
+.output {
+    background:#f5f5f5;
+    border-radius:12px;
+    padding:20px;
+    min-height:180px;
+    overflow:auto;
+    margin-top:20px;
+}
+
+.card {
+    background:white;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:15px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    line-height:1.6;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>🌤 Weather Viewer</h1>
+
+<div class="input-row">
+<input type="text" id="city" placeholder="Enter City (Delhi, Ballari)">
+</div>
+
+<button onclick="showWeather()">Show Weather</button>
+
+<div id="output" class="output">Weather data will appear here...</div>
+</div>
+
+<script>
+
+function showWeather() {
+    const city = document.getElementById("city").value.trim();
+    if(!city) return alert("Enter a city");
+
+    fetch(`http://localhost:1111/weather/show/${city}`)
+        .then(res => res.json())
+        .then(data => displayWeather(data))
+        .catch(() => {
+            document.getElementById("output").innerHTML =
+                "Error fetching data.";
+        });
+}
+
+function displayWeather(list) {
+    let html = "";
+
+    if(list.length === 0){
+        html = "No weather found for this city.";
+    } else {
+        list.forEach(w => {
+            html += `
+                <div class="card">
+                    <b>City:</b> ${w.city}<br>
+                    <b>Temperature:</b> ${w.temperature} °C<br>
+                    <b>Humidity:</b> ${w.humidity}%<br>
+                    <b>Description:</b> ${w.description}<br>
+                    <b>Recorded At:</b> ${w.createdAt}
+                </div>
+            `;
+        });
+    }
+
+    document.getElementById("output").innerHTML = html;
+}
+
+</script>
+
+</body>
+</html>
