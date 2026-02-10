@@ -113,6 +113,17 @@ function showWeather() {
                 "Error fetching weather data.";
         });
 }
+function formatDate(dateStr){
+    const d = new Date(dateStr);
+
+    return d.toLocaleString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+}
 
 function displayWeather(w) {
 
@@ -120,7 +131,7 @@ function displayWeather(w) {
         document.getElementById("output").innerHTML =
             "No weather found for this city.";
         return;
-    }
+    } 
 
     const html = `
         <div class="card">
@@ -128,7 +139,8 @@ function displayWeather(w) {
             <b>Temperature:</b> ${w.temperature} °C<br>
             <b>Humidity:</b> ${w.humidity}%<br>
             <b>Description:</b> ${w.description}<br>
-            <b>Recorded At:</b> ${w.createdAt ?? "Live"}
+            <b>Recorded At:</b> ${w.createdAt ? formatDate(w.createdAt) : "Live"}
+
         </div>
     `;
 
