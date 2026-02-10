@@ -92,7 +92,10 @@ button {
 </div>
 
 <script>
-const BASE_URL = "https://my-weatherapp-m9re.onrender.com/";
+
+// 🔹 CHANGE ONLY THIS URL IF BACKEND URL CHANGES
+
+const BASE_URL = "https://my-weatherapp-m9re.onrender.com";
 
 function showWeather() {
     const city = document.getElementById("city").value.trim();
@@ -120,30 +123,21 @@ function displayWeather(w) {
         return;
     }
 
-    // ---- FORMAT DATE HERE ----
-    let recordedTime = "Live";
-    if (w.createdAt) {
-        const d = new Date(w.createdAt);
-        recordedTime =
-            d.toLocaleDateString() + " " + d.toLocaleTimeString();
-    }
-
     const html = `
         <div class="card">
             <b>City:</b> ${w.city}<br>
             <b>Temperature:</b> ${w.temperature} °C<br>
             <b>Humidity:</b> ${w.humidity}%<br>
             <b>Description:</b> ${w.description}<br>
-            <b>Recorded At:</b> ${recordedTime}
+            <b>Recorded At:</b> ${w.createdAt ?? "Live"}
         </div>
     `;
 
     document.getElementById("output").innerHTML = html;
 }
 
-
-
 </script>
+
 
 </body>
 </html>
