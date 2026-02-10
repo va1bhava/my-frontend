@@ -93,37 +93,44 @@ button {
 
 <script>
 
+// 🔹 CHANGE ONLY THIS URL IF BACKEND URL CHANGES
+const BASE_URL = "https://my-backend-production-58f1.up.railway.app";
+
 function showWeather() {
     const city = document.getElementById("city").value.trim();
     if(!city) return alert("Enter a city");
 
-    fetch(`https://my-backend-production-58f1.up.railway.app/weather/show/${city}`)
-        .then(res => res.json())
+    document.getElementById("output").innerHTML = "Loading...";
+
+    fetch(`${BASE_URL}/weather/show/${city}`)
+        .then(res => {
+            if(!res.ok) throw new Error("City not found");
+            return res.json();
+        })
         .then(data => displayWeather(data))
         .catch(() => {
             document.getElementById("output").innerHTML =
-                "Error fetching data.";
+                "Error fetching weather data.";
         });
 }
 
-function displayWeather(list) {
-    let html = "";
+function displayWeather(w) {
 
-    if(list.length === 0){
-        html = "No weather found for this city.";
-    } else {
-        list.forEach(w => {
-            html += `
-                <div class="card">
-                    <b>City:</b> ${w.city}<br>
-                    <b>Temperature:</b> ${w.temperature} °C<br>
-                    <b>Humidity:</b> ${w.humidity}%<br>
-                    <b>Description:</b> ${w.description}<br>
-                    <b>Recorded At:</b> ${w.createdAt}
-                </div>
-            `;
-        });
+    if(!w || !w.city){
+        document.getElementById("output").innerHTML =
+            "No weather found for this city.";
+        return;
     }
+
+    const html = `
+        <div class="card">
+            <b>City:</b> ${w.city}<br>
+            <b>Temperature:</b> ${w.temperature} °C<br>
+            <b>Humidity:</b> ${w.humidity}%<br>
+            <b>Description:</b> ${w.description}<br>
+            <b>Recorded At:</b> ${w.createdAt ?? "Live"}
+        </div>
+    `;
 
     document.getElementById("output").innerHTML = html;
 }
